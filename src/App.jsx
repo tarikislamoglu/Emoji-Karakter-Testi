@@ -1,18 +1,24 @@
-import { useState, useEffect } from 'react'
-import ResultsModal from './components/ResultsModal'
-import EmojiLists from './components/EmojiLists'
-import emojis from './data/emojis'
-import './styles.css'
+import { useState, useEffect } from "react";
+import ResultsModal from "./components/ResultsModal";
+import EmojiLists from "./components/EmojiLists";
+import emojis from "./data/emojis";
+import "./styles.css";
 
 export default function App() {
-  const [likedEmojis, setLikedEmojis] = useState([])
-  const [passedEmojis, setPassedEmojis] = useState([])
-  const [currentEmojis, setCurrentEmojis] = useState(getRandomEmojis())
-  const [showResults, setShowResults] = useState(false)
-  const [resultsReady, setResultsReady] = useState(false)
-  const [hydrated, setHydrated] = useState(false)
+  const [likedEmojis, setLikedEmojis] = useState([]);
+  const [passedEmojis, setPassedEmojis] = useState([]);
+  const [currentEmojis, setCurrentEmojis] = useState(getRandomEmojis());
+  const [showResults, setShowResults] = useState(false);
+  const [resultsReady, setResultsReady] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
-  function handleClick() {}
+  function handleClick(e) {
+    const clickedEmoji = e.target.textContent;
+    setLikedEmojis((prev) => [...prev, clickedEmoji]);
+    const passedEmoji = currentEmojis.filter((emoji) => emoji !== clickedEmoji);
+    setPassedEmojis((prev) => [...prev, ...passedEmoji]);
+    setCurrentEmojis(getRandomEmojis());
+  }
   /* Challenge
 
 	Uygulamanın çalışması için yukarıdaki handleClick fonksiyonunun tamamlanması gerekir. Fonksiyon, kullanıcı butonlardan birine tıkladığında çağrıldığında üç şey yapmalıdır (satır 77 ila 85): 
@@ -30,40 +36,40 @@ Sadece yukarıdaki handleClick fonksiyonunun içine kod yazmalısınız. Projeni
 
   function getRandomEmojis() {
     function chooseRandomEmoji() {
-      return emojis[Math.floor(Math.random() * emojis.length)]
+      return emojis[Math.floor(Math.random() * emojis.length)];
     }
-    return new Array(3).fill('').map((item) => chooseRandomEmoji())
+    return new Array(3).fill("").map((item) => chooseRandomEmoji());
   }
 
   function getResults() {
-    setShowResults(true)
+    setShowResults(true);
   }
 
   function reset() {
-    setLikedEmojis([])
-    setPassedEmojis([])
-    setShowResults(false)
-    setResultsReady(false)
+    setLikedEmojis([]);
+    setPassedEmojis([]);
+    setShowResults(false);
+    setResultsReady(false);
   }
 
   useEffect(() => {
     showResults &&
       setTimeout(() => {
-        setResultsReady(true)
-      }, 2000)
-  }, [showResults])
+        setResultsReady(true);
+      }, 2000);
+  }, [showResults]);
 
   function generateListItems(element) {
-    return <li key={crypto.randomUUID()}>{element}</li>
+    return <li key={crypto.randomUUID()}>{element}</li>;
   }
   useEffect(() => {
     // Emojilerin yüklenmesi
-    setHydrated(true)
-  }, [])
+    setHydrated(true);
+  }, []);
 
   return (
-    <div className='wrapper'>
-      <div className='results-counter'>{likedEmojis.length} / 10</div>
+    <div className="wrapper">
+      <div className="results-counter">{likedEmojis.length} / 10</div>
 
       <ResultsModal
         showResults={showResults}
@@ -78,7 +84,7 @@ Sadece yukarıdaki handleClick fonksiyonunun içine kod yazmalısınız. Projeni
 
       {hydrated ? ( // hydrated true olduğunda içeriği göster
         <>
-          <div className='overall-emojis-container'>
+          <div className="overall-emojis-container">
             <button onClick={handleClick}>{currentEmojis[0]}</button>
             <button onClick={handleClick}>{currentEmojis[1]}</button>
             <button onClick={handleClick}>{currentEmojis[2]}</button>
@@ -95,5 +101,5 @@ Sadece yukarıdaki handleClick fonksiyonunun içine kod yazmalısınız. Projeni
         <p>Emojiler yükleniyor...</p>
       )}
     </div>
-  )
+  );
 }
